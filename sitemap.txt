@@ -1,8 +1,10 @@
-https://orangestarone.github.io/2024/08/19/%E5%8D%9A%E5%AE%A2%E6%B5%8B%E8%AF%95/
+https://orangestarone.github.io/2024/08/20/%E4%B8%8D%E7%9F%A5%E5%90%8D%E7%9A%84%E6%AF%94%E8%B5%9B%E9%A2%98%E7%9B%AE/
 https://orangestarone.github.io/categories/index.html
 https://orangestarone.github.io/tags/index.html
 https://orangestarone.github.io/daily/index.html
 https://orangestarone.github.io/music/index.html
 https://orangestarone.github.io/
-https://orangestarone.github.io/tags/%E6%B5%8B%E8%AF%95-%E7%AC%AC%E4%B8%80%E7%AF%87-%E5%9B%BE%E7%89%87%E8%AE%BE%E7%BD%AE/
-https://orangestarone.github.io/categories/%E6%B5%8B%E8%AF%95/
+https://orangestarone.github.io/tags/reverse/
+https://orangestarone.github.io/tags/android/
+https://orangestarone.github.io/tags/friada/
+https://orangestarone.github.io/categories/CTF/
