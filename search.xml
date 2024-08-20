@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>2022年春秋杯冬季赛-reindeer game</title>
+      <link href="/2024/08/21/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/"/>
+      <url>/2024/08/21/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/</url>
+      
+        <content type="html"><![CDATA[<h1 id="2022年春秋杯冬季赛-reindeer-game"><a href="#2022年春秋杯冬季赛-reindeer-game" class="headerlink" title="2022年春秋杯冬季赛-reindeer game"></a>2022年春秋杯冬季赛-reindeer game</h1><h4 id="工具准备："><a href="#工具准备：" class="headerlink" title="工具准备："></a><strong>工具准备：</strong></h4><p>&#x20;  1、 pyinstxtractor.py</p><p>&#x20;  2、uncompyle6</p><h4 id="思路综述："><a href="#思路综述：" class="headerlink" title="思路综述："></a><strong>思路综述：</strong></h4><p>&#x20;   1、正常通过游戏；</p><p>&#x20;   2、①从python打包而成的exe入手；</p><p>&#x20;         ②用pyinstxtractor.py工具拆包，拿到游戏的py源码；</p><p>&#x20;         ③分析逻辑，找出得到flag的部分或者修改游戏胜利条件。</p><p>&#x20;   3、其他方法，可以尝试通过游戏修改器，更改关键数值（具体步骤本文并没有列出）。</p><h4 id="详述："><a href="#详述：" class="headerlink" title="详述："></a><strong>详述：</strong></h4><p>题目是一个驯鹿🦌吃姜饼的游戏：题目要求吃30个，不太擅长游戏的小伙伴可能很久都不能过关。</p><p>这一题很明显是用python写的游戏，并且用了pyinstaller 进行了打包：</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_EsyD6U0mdV.png"></p><p>接下来的思路就来了，拿到源py代码，不就随意发挥了，有打包工具就有拆包工（pyinstxtractor.py），注意这里的拆包工具，历史版本太多。</p><p>版本网址一：<a href="https://github.com/extremecoders-re/pyinstxtractor" title="https://github.com/extremecoders-re/pyinstxtractor">https://github.com/extremecoders-re/pyinstxtractor</a>；</p><p>版本网址二：<a href="https://sourceforge.net/projects/pyinstallerextractor/files/dist/pyinstxtractor.py/download?use_mirror=nchc" title="https://sourceforge.net/projects/pyinstallerextractor/files/dist/pyinstxtractor.py/download?use_mirror=nchc">https://sourceforge.net/projects/pyinstallerextractor/files/dist/pyinstxtractor.py/download?use_mirror&#x3D;nchc</a></p><p>版本三:网上查询，接下来的是别的博主改写的，可以直接用（也都算是用下来比较好的）；</p><p><a href="https://blog.csdn.net/qfcy_/article/details/113245876" title="https://blog.csdn.net/qfcy_/article/details/113245876"><a href="https://blog.csdn.net/qfcy">https://blog.csdn.net/qfcy</a> _&#x2F;article&#x2F;details&#x2F;113245876</a></p><p>拿到拆包工具后：</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 pyinstxtractor.py reindeer.exe</span><br></pre></td></tr></table></figure><p>之后会生成一个对应的包：</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_pd-5oFuEkG.png"></p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_ahqhOCLgxr.png"></p><p>进入包中主要寻找二个部分，第一个就是reindeer的文件，实际上这是一个pyc文件，只是又由于拆包时造成的，直接加上.pyc后缀即可；</p><p>接下来就是对reindeer.pyc的反编译，需要用到工具：uncompyle6</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uncompyle6 -o reindeer.py reindeer.pyc</span><br></pre></td></tr></table></figure><p>执行后生成py源代码，这时就可以看到整个游戏的逻辑；</p><p>部分展示图：</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_UkLCmjZG3W.png"></p><p>大概分析完逻辑后，这里看到有一个重要的模块astar模块，这里是作者自己写的，所以在打包的时候应该已经打包在一起了；可以去拆的包查找：</p><p>这就是第二部分: 将astar.pyc文件同样反编译为py文件</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_arAeb-BpqC.png"></p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_YCS4b8ftCk.png"></p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_B--lg87bBn.png"></p><p>如果缺少pygame模块的可以自行安装一下，之后就可以正常运行reindeer.py文件。</p><p>到这里我们已经拿到游戏的大部分源码了，可以直接通过修改吃姜饼的数量完成游戏,一定要注意修改的数值大小（不可为0，否则就失去了游戏的意义）；修改的关键值：TO_WIN&#x20;</p><p>这个方法适合追寻解题速度同时又不想失去游戏的乐趣的师傅；</p><p>根本就不想玩游戏的师傅，在分析游戏逻辑时，就发现拿到flag的关键；逻辑胜利，直接来到</p><p>def victory(time)</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_JIXGXjELXq.png"></p><p>:这里，发现flag藏在了getczekolada()中，直接进入astar.py</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_kANiqsOU-I.png"></p><p>这里就是一个gzip的压缩，直接一个解压缩，就可得到flag值</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import gzip</span><br><span class="line">data = b&#x27;\x1f\x8b\x08\x00\xd6\x03\xa0c\x02\xffK\xcbIL\xaf\xb60J4JLN2\xd3\xb5\xb400\xd65\xb14\x06\xb2\x8cR\x92t\xd3\x0cM\x8c\rS,\r\x92\xcdR\x0ck\x01\xc7Y,\xef*\x00\x00\x00&#x27;</span><br><span class="line">print(gzip.decompress(data))</span><br><span class="line">#b&#x27;flag&#123;82a2acb6-9803-4936-92db-f1431d90c6d1&#125;&#x27;</span><br></pre></td></tr></table></figure><p>下面这幅图是：修改姜饼个数为1（4s通关🦌）；</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_raLuviGzK1.png"></p><h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结</strong>：</h3><p>&#x20;       1、小白文章，如果发现错误还请各位师傅指出。</p><p>&#x20;       2、中间踩的空较多，算是趟水的人，各位请放心食用。</p><h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a><strong>补充：</strong></h3><p>&#x20;       作者师傅说了有彩蛋，彩蛋开启之术，同时按下0，1，2数字键（不要使用小键盘哦）：</p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_hUg2Ff7bcu.png"></p><p><img src="/./../image/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/image_VzHpZpHWGP.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> 拆包 </tag>
+            
+            <tag> pyc </tag>
+            
+            <tag> gzip </tag>
+            
+            <tag> 游戏逆向 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2024磐石SMC</title>
       <link href="/2024/08/20/2024%E7%A3%90%E7%9F%B3SMC/"/>
       <url>/2024/08/20/2024%E7%A3%90%E7%9F%B3SMC/</url>

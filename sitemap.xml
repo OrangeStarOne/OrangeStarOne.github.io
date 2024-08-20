@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://orangestarone.github.io/2024/08/21/2022%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-reindeer-game/</loc>
+    
+    <lastmod>2024-08-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://orangestarone.github.io/music/index.html</loc>
     
     <lastmod>2024-08-20</lastmod>
@@ -63,6 +72,41 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/python/</loc>
+    <lastmod>2024-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/%E6%8B%86%E5%8C%85/</loc>
+    <lastmod>2024-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/pyc/</loc>
+    <lastmod>2024-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/gzip/</loc>
+    <lastmod>2024-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/%E6%B8%B8%E6%88%8F%E9%80%86%E5%90%91/</loc>
+    <lastmod>2024-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://orangestarone.github.io/tags/SMC/</loc>
