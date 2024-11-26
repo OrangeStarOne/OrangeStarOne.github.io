@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://orangestarone.github.io/2024/11/26/%E3%80%8A%E5%A5%BD%E4%B8%9C%E8%A5%BF%E3%80%8B%E8%A7%82%E5%BD%B1%E6%84%9F%E5%8F%97/</loc>
+    <loc>https://orangestarone.github.io/daily/index.html</loc>
     
     <lastmod>2024-11-26</lastmod>
     
@@ -127,15 +127,6 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://orangestarone.github.io/daily/index.html</loc>
-    
-    <lastmod>2024-08-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://orangestarone.github.io/</loc>
@@ -216,20 +207,6 @@
   </url>
   
   <url>
-    <loc>https://orangestarone.github.io/tags/stack/</loc>
-    <lastmod>2024-11-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://orangestarone.github.io/tags/CISCN/</loc>
-    <lastmod>2024-11-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://orangestarone.github.io/tags/SMC/</loc>
     <lastmod>2024-11-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -238,6 +215,20 @@
   
   <url>
     <loc>https://orangestarone.github.io/tags/%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8%E5%88%9D%E8%B5%9B/</loc>
+    <lastmod>2024-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/stack/</loc>
+    <lastmod>2024-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://orangestarone.github.io/tags/CISCN/</loc>
     <lastmod>2024-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -266,20 +257,6 @@
   
   <url>
     <loc>https://orangestarone.github.io/tags/%E6%88%AA%E5%9B%BE%E6%81%A2%E5%A4%8D/</loc>
-    <lastmod>2024-11-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://orangestarone.github.io/tags/%E9%9A%8F%E5%BF%83%E8%AE%B0/</loc>
-    <lastmod>2024-11-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://orangestarone.github.io/tags/%E8%A7%82%E5%BD%B1%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2024-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
