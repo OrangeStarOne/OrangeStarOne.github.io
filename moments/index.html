@@ -6,8 +6,8 @@
 <meta property="og:description" content="我的朋友圈        * { margin: 0; padding: 0; box-sizing: border-box; }     body {       max-width: 800px;       margin: 0 auto;       padding: 2rem 1rem;       font-family: &quot;Microsoft YaHei&quot;, sa">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://orangestarone.github.io/image/%E5%A4%B4%E5%83%8F.jpg">
-<meta property="article:published_time" content="2026-01-18T04:23:42.611Z">
-<meta property="article:modified_time" content="2026-01-18T04:23:42.611Z">
+<meta property="article:published_time" content="2026-01-18T04:39:19.406Z">
+<meta property="article:modified_time" content="2026-01-18T04:39:19.406Z">
 <meta property="article:author" content="OrangeStarOne">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://orangestarone.github.io/image/%E5%A4%B4%E5%83%8F.jpg"><link rel="shortcut icon" href="/bitbug_favicon.ico"><link rel="canonical" href="https://orangestarone.github.io/moments/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
@@ -55,7 +55,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2026-01-18 12:23:42'
+  postUpdate: '2026-01-18 12:39:19'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -195,7 +195,97 @@
     .moment-time {
       color: #999;
       font-size: 0.9rem;
-      text-align: right;
+      margin-bottom: 0.8rem;
+    }
+    /* 点赞样式 */
+    .like-section {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+    .like-btn {
+      background: none;
+      border: none;
+      color: #2196F3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.95rem;
+    }
+    .like-btn:hover {
+      color: #1976D2;
+    }
+    .like-btn:disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    .like-count {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    /* 评论样式 */
+    .comment-section {
+      margin-top: 1rem;
+    }
+    .comment-header {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+    .comment-list {
+      margin-bottom: 1rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .comment-item {
+      padding: 0.6rem;
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .comment-author {
+      font-size: 0.85rem;
+      color: #2196F3;
+      margin-bottom: 0.2rem;
+    }
+    .comment-content {
+      font-size: 0.9rem;
+    }
+    .comment-time {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.3rem;
+    }
+    .comment-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 0.6rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .comment-submit {
+      padding: 0.6rem 1rem;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .comment-submit:hover {
+      background-color: #1976D2;
+    }
+    .comment-submit:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
     }
     .loading {
       text-align: center;
@@ -225,69 +315,128 @@
     .publish-link:hover {
       text-decoration: underline;
     }
+    .tip {
+      text-align: center;
+      color: #999;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
   <h1>我的朋友圈</h1>
   <a href="../moments-publish/" class="publish-link">👉 发布新动态</a>
   <div id="momentsList"></div>
+  <p class="tip">点赞/评论需要 GitHub Token 鉴权，Token 仅保存在本地</p>
 
   <script>
     // ========== 替换成你的配置 ==========
     const CONFIG = {
-      repoOwner: 'orangestarone', // 如：octocat
-      repoName: 'moments-data' // 存放动态的仓库名
+      repoOwner: '你的GitHub用户名（小写）',
+      repoName: 'moments-data',
+      // 可选：如果是私有仓库，必须填 Token；公共仓库发布点赞/评论也需要 Token
+      githubToken: '你的GitHub Token（勾选 repo 权限）' 
     };
 
-    // 加载朋友圈动态
+    // 加载朋友圈动态（主函数）
     const loadMoments = async () => {
       const momentsList = document.getElementById('momentsList');
       momentsList.innerHTML = '<div class="loading">加载中...</div>';
 
       try {
-        // 调用 GitHub API 获取 Issues（朋友圈动态）
-        const response = await fetch(`https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues?sort=created&direction=desc`);
+        const response = await fetch(
+          `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues?sort=created&direction=desc`,
+          {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              ...(CONFIG.githubToken && { 'Authorization': `token ${CONFIG.githubToken}` })
+            }
+          }
+        );
         
         if (!response.ok) {
-          throw new Error(`获取失败：${response.status}`);
+          throw new Error(`获取动态失败：${response.status}`);
         }
 
         const issues = await response.json();
-
-        // 无动态时
         if (issues.length === 0) {
           momentsList.innerHTML = '<div class="empty">暂无动态，快去发布第一条吧！</div>';
           return;
         }
 
-        // 渲染动态列表
+        // 遍历每个动态，获取点赞和评论
         let html = '';
         for (const issue of issues) {
-          // 提取内容和媒体
+          // 1. 提取动态内容和媒体
           let content = issue.body;
           let mediaHtml = '';
           const mediaMatch = content.match(/!\[media\]\((data:image\/.*?)\)/);
-          
-          // 分离文本和媒体
           if (mediaMatch) {
             const mediaUrl = mediaMatch[1];
             mediaHtml = `<img class="moment-media" src="${mediaUrl}" alt="动态图片">`;
             content = content.replace(mediaMatch[0], '').trim() || '（无文字）';
           }
-
-          // 格式化时间
           const time = new Date(issue.created_at).toLocaleString('zh-CN');
 
-          // 拼接卡片
+          // 2. 获取点赞数（Reactions）
+          const likeResponse = await fetch(
+            `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues/${issue.number}/reactions`,
+            {
+              headers: {
+                'Accept': 'application/vnd.github.squirrel-girl-preview+json', // 必须加这个头才能获取 Reactions
+                ...(CONFIG.githubToken && { 'Authorization': `token ${CONFIG.githubToken}` })
+              }
+            }
+          );
+          const likes = likeResponse.ok ? await likeResponse.json() : [];
+          const likeCount = likes.filter(r => r.content === 'sparkles').length; // 统计 ✨ 表情的数量
+
+          // 3. 获取评论列表（Comments）
+          const commentResponse = await fetch(
+            `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues/${issue.number}/comments`,
+            {
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                ...(CONFIG.githubToken && { 'Authorization': `token ${CONFIG.githubToken}` })
+              }
+            }
+          );
+          const comments = commentResponse.ok ? await commentResponse.json() : [];
+          const commentHtml = comments.map(comment => `
+            <div class="comment-item">
+              <div class="comment-author">${comment.user.login}</div>
+              <div class="comment-content">${comment.body}</div>
+              <div class="comment-time">${new Date(comment.created_at).toLocaleString('zh-CN')}</div>
+            </div>
+          `).join('');
+
+          // 拼接动态卡片（包含点赞和评论）
           html += `
-            <div class="moment-card">
+            <div class="moment-card" data-issue-number="${issue.number}">
               <div class="moment-content">${content}</div>
               ${mediaHtml}
               <div class="moment-time">发布于：${time}</div>
+              
+              <!-- 点赞区域 -->
+              <div class="like-section">
+                <button class="like-btn" onclick="likeMoment(${issue.number}, this)">
+                  <span>✨</span> 点赞
+                </button>
+                <span class="like-count">${likeCount} 人点赞</span>
+              </div>
+
+              <!-- 评论区域 -->
+              <div class="comment-section">
+                <div class="comment-header">评论 (${comments.length})</div>
+                <div class="comment-list">${commentHtml || '<div style="color:#999;font-size:0.9rem">暂无评论</div>'}</div>
+                <div class="comment-form">
+                  <input type="text" class="comment-input" placeholder="说点什么..." id="comment-input-${issue.number}">
+                  <button class="comment-submit" onclick="postComment(${issue.number}, this)">发送</button>
+                </div>
+              </div>
             </div>
           `;
         }
-
         momentsList.innerHTML = html;
       } catch (error) {
         momentsList.innerHTML = `<div class="error">加载失败：${error.message}</div>`;
@@ -295,8 +444,102 @@
       }
     };
 
+    // 点赞功能函数
+    const likeMoment = async (issueNumber, btn) => {
+      if (!CONFIG.githubToken) {
+        alert('请配置 GitHub Token 后再点赞！');
+        return;
+      }
+      btn.disabled = true;
+      btn.innerHTML = '<span>✨</span> 点赞中...';
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues/${issueNumber}/reactions`,
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/vnd.github.squirrel-girl-preview+json',
+              'Authorization': `token ${CONFIG.githubToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: 'sparkles' }) // 用 ✨ 作为点赞表情
+          }
+        );
+        if (response.ok) {
+          // 点赞成功，更新点赞数
+          const likeCountEl = btn.nextElementSibling;
+          const currentCount = parseInt(likeCountEl.textContent);
+          likeCountEl.textContent = `${currentCount + 1} 人点赞`;
+        } else if (response.status === 201) {
+          // 201 表示已点赞（重复点赞）
+          alert('你已经点过赞啦！');
+        } else {
+          throw new Error('点赞失败，请检查 Token 权限');
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>✨</span> 点赞';
+      }
+    };
+
+    // 发布评论函数
+    const postComment = async (issueNumber, btn) => {
+      const input = document.getElementById(`comment-input-${issueNumber}`);
+      const content = input.value.trim();
+      if (!content) {
+        alert('评论内容不能为空！');
+        return;
+      }
+      if (!CONFIG.githubToken) {
+        alert('请配置 GitHub Token 后再评论！');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = '发送中...';
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/issues/${issueNumber}/comments`,
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'Authorization': `token ${CONFIG.githubToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ body: content })
+          }
+        );
+        if (response.ok) {
+          const comment = await response.json();
+          // 评论成功，添加到评论列表
+          const commentList = btn.parentElement.previousElementSibling;
+          const newComment = `
+            <div class="comment-item">
+              <div class="comment-author">${comment.user.login}</div>
+              <div class="comment-content">${comment.body}</div>
+              <div class="comment-time">${new Date().toLocaleString('zh-CN')}</div>
+            </div>
+          `;
+          commentList.innerHTML = newComment + commentList.innerHTML;
+          input.value = ''; // 清空输入框
+        } else {
+          throw new Error('评论失败，请检查 Token 权限');
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '发送';
+      }
+    };
+
     // 页面加载时执行
     window.onload = loadMoments;
+    // 暴露函数到全局（供 onclick 调用）
+    window.likeMoment = likeMoment;
+    window.postComment = postComment;
   </script>
 </body>
 </html></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/image/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">OrangeStarOne</div><div class="author-info__description">寻找自己星河的少年</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/OrangeStarOne"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/OrangeStarOne" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:orangestarone@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是橘子的小站，欢迎大家共同交流！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/20/%E4%B8%8D%E7%9F%A5%E5%90%8D%E7%9A%84%E6%AF%94%E8%B5%9B%E9%A2%98%E7%9B%AE/" title="不知名的比赛题目">不知名的比赛题目</a><time datetime="2024-08-19T19:26:25.000Z" title="发表于 2024-08-20 03:26:25">2024-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/23/2024CISCNandroidso-re/" title="‘[2024CISCN]androidso_re’">‘[2024CISCN]androidso_re’</a><time datetime="2024-06-23T08:58:25.000Z" title="发表于 2024-06-23 16:58:25">2024-06-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/20/2024%E7%A3%90%E7%9F%B3SMC/" title="2024磐石SMC">2024磐石SMC</a><time datetime="2024-06-20T09:01:24.000Z" title="发表于 2024-06-20 17:01:24">2024-06-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/23/%E6%98%9FCTF-snippingTools/" title="’*CTF_snippingTools‘">’*CTF_snippingTools‘</a><time datetime="2023-08-23T09:10:22.000Z" title="发表于 2023-08-23 17:10:22">2023-08-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/21/RCTF2021-welpwn/" title="[RCTF2021]welpwn">[RCTF2021]welpwn</a><time datetime="2023-08-21T06:57:37.000Z" title="发表于 2023-08-21 14:57:37">2023-08-21</time></div></div></div></div><div class="card-widget" id="card-newest-comments"><div class="item-headline"><i class="fas fa-comment-dots"></i><span>最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div><div class="card-widget card-categories"><div class="item-headline">
@@ -306,7 +549,7 @@
             </div>
             <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/"><span class="card-category-list-name">CTF</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%A7%82%E5%BD%B1%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">观影记录</span><span class="card-category-list-count">1</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/PWN/" style="font-size: 1.45em; color: rgb(143, 37, 76)">PWN</a><a href="/tags/%E9%B9%A4%E5%9F%8E%E6%9D%AF/" style="font-size: 1.15em; color: rgb(39, 154, 54)">鹤城杯</a><a href="/tags/python/" style="font-size: 1.15em; color: rgb(33, 188, 104)">python</a><a href="/tags/%E6%8B%86%E5%8C%85/" style="font-size: 1.15em; color: rgb(152, 119, 192)">拆包</a><a href="/tags/pyc/" style="font-size: 1.15em; color: rgb(31, 11, 131)">pyc</a><a href="/tags/gzip/" style="font-size: 1.15em; color: rgb(8, 55, 30)">gzip</a><a href="/tags/%E6%B8%B8%E6%88%8F%E9%80%86%E5%90%91/" style="font-size: 1.15em; color: rgb(70, 157, 200)">游戏逆向</a><a href="/tags/reverse/" style="font-size: 1.35em; color: rgb(65, 59, 21)">reverse</a><a href="/tags/android/" style="font-size: 1.25em; color: rgb(112, 54, 113)">android</a><a href="/tags/friada/" style="font-size: 1.25em; color: rgb(126, 76, 116)">friada</a><a href="/tags/SMC/" style="font-size: 1.15em; color: rgb(142, 116, 138)">SMC</a><a href="/tags/%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8%E5%88%9D%E8%B5%9B/" style="font-size: 1.15em; color: rgb(81, 77, 10)">磐石行动初赛</a><a href="/tags/CISCN/" style="font-size: 1.15em; color: rgb(75, 115, 77)">CISCN</a><a href="/tags/stack/" style="font-size: 1.25em; color: rgb(166, 129, 127)">stack</a><a href="/tags/RCTF2021/" style="font-size: 1.15em; color: rgb(125, 170, 167)">RCTF2021</a><a href="/tags/%E9%9A%8F%E5%BF%83%E8%AE%B0/" style="font-size: 1.15em; color: rgb(99, 168, 132)">随心记</a><a href="/tags/%E8%A7%82%E5%BD%B1%E8%AE%B0%E5%BD%95/" style="font-size: 1.15em; color: rgb(16, 16, 22)">观影记录</a><a href="/tags/MISC/" style="font-size: 1.15em; color: rgb(86, 87, 83)">MISC</a><a href="/tags/windows%E6%BC%8F%E6%B4%9E/" style="font-size: 1.15em; color: rgb(177, 82, 182)">windows漏洞</a><a href="/tags/%E6%88%AA%E5%9B%BE%E6%81%A2%E5%A4%8D/" style="font-size: 1.15em; color: rgb(53, 135, 21)">截图恢复</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">6</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/12/"><span class="card-archive-list-date">十二月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">10</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">7.1k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-01-18T04:27:10.819Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By OrangeStarOne</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="/js/tw_cn.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/PWN/" style="font-size: 1.45em; color: rgb(181, 173, 174)">PWN</a><a href="/tags/%E9%B9%A4%E5%9F%8E%E6%9D%AF/" style="font-size: 1.15em; color: rgb(187, 115, 43)">鹤城杯</a><a href="/tags/python/" style="font-size: 1.15em; color: rgb(141, 12, 164)">python</a><a href="/tags/%E6%8B%86%E5%8C%85/" style="font-size: 1.15em; color: rgb(136, 67, 25)">拆包</a><a href="/tags/pyc/" style="font-size: 1.15em; color: rgb(46, 193, 105)">pyc</a><a href="/tags/gzip/" style="font-size: 1.15em; color: rgb(76, 191, 173)">gzip</a><a href="/tags/%E6%B8%B8%E6%88%8F%E9%80%86%E5%90%91/" style="font-size: 1.15em; color: rgb(37, 179, 18)">游戏逆向</a><a href="/tags/reverse/" style="font-size: 1.35em; color: rgb(169, 153, 6)">reverse</a><a href="/tags/android/" style="font-size: 1.25em; color: rgb(87, 37, 92)">android</a><a href="/tags/friada/" style="font-size: 1.25em; color: rgb(28, 142, 15)">friada</a><a href="/tags/SMC/" style="font-size: 1.15em; color: rgb(81, 44, 196)">SMC</a><a href="/tags/%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8%E5%88%9D%E8%B5%9B/" style="font-size: 1.15em; color: rgb(195, 78, 64)">磐石行动初赛</a><a href="/tags/stack/" style="font-size: 1.25em; color: rgb(77, 179, 49)">stack</a><a href="/tags/CISCN/" style="font-size: 1.15em; color: rgb(93, 99, 61)">CISCN</a><a href="/tags/RCTF2021/" style="font-size: 1.15em; color: rgb(127, 66, 20)">RCTF2021</a><a href="/tags/%E9%9A%8F%E5%BF%83%E8%AE%B0/" style="font-size: 1.15em; color: rgb(35, 189, 108)">随心记</a><a href="/tags/%E8%A7%82%E5%BD%B1%E8%AE%B0%E5%BD%95/" style="font-size: 1.15em; color: rgb(149, 39, 90)">观影记录</a><a href="/tags/MISC/" style="font-size: 1.15em; color: rgb(173, 106, 71)">MISC</a><a href="/tags/windows%E6%BC%8F%E6%B4%9E/" style="font-size: 1.15em; color: rgb(115, 189, 192)">windows漏洞</a><a href="/tags/%E6%88%AA%E5%9B%BE%E6%81%A2%E5%A4%8D/" style="font-size: 1.15em; color: rgb(29, 157, 128)">截图恢复</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">6</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/12/"><span class="card-archive-list-date">十二月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">10</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">7.1k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-01-18T04:39:37.446Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By OrangeStarOne</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="/js/tw_cn.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
   const initGitalk = () => {
     const gitalk = new Gitalk(Object.assign({
       clientID: 'Ov23livbDl8LgPSt1hYg',
